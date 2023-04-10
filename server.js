@@ -1,27 +1,17 @@
 const express = require('express');
-const bodyParser = require('body-parser');
-const exphbs = require('express-handlebars');
+const dotenv = require('dotenv');
+const cors = require('cors');
 const path = require('path');
 const nodemailer = require('nodemailer');
 
+dotenv.config();
 const app = express();
-const port = process.env.PORT || 4000;
-// View engine setup
-app.engine('handlebars', exphbs());
-app.set('view engine', 'handlebars');
+app.use(express.json());
+app.use(cors({ origin: `${process.env.CLIENT_URL}` }));
+const port = process.env.PORT || 5000;
 
-// Static folder
-app.use('/public', express.static(path.join(__dirname, 'public')));
 
-// Body Parser Middleware
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
-
-app.get('/', (req, res) => {
-  res.render('contact');
-});
-
-app.post('/api/email', (req, res) => {
+app.post('^/api1', (req, res) => {
   const output = `
     <p>You have a new contact request</p>
     <h3>Contact Details</h3>
@@ -35,8 +25,7 @@ app.post('/api/email', (req, res) => {
     <p>${req.body.message}</p>
   `;
 
-  // create reusable transporter object using the default SMTP transport
-  let transpoter = nodemailer.createTransport({
+ let transpoter = nodemailer.createTransport({
     service: 'gmail',
     port: 587,
     secure: false, // true for 465, false for other ports
@@ -56,28 +45,13 @@ app.post('/api/email', (req, res) => {
   });
   });
 
-
-  // setup email data with unicode symbols
-  let mailOptions = {
-      from: '"Nodemailer Contact" <your@email.com>', // sender address
-      to: 'RECEIVEREMAILS', // list of receivers
-      subject: 'Node Contact Request', // Subject line
-      text: 'Hello world?', // plain text body
-      html: output // html body
-  };
-
-  // send mail with defined transport object
-  transporter.sendMail(mailOptions, (error, info) => {
-      if (error) {
-          return console.log(error);
-      }
-      console.log('Message sent: %s', info.messageId);   
-      console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
-
-      res.render('contact', {msg:'Email has been sent'});
-  });
-  
-
 app.listen(port, () => {
   console.log(`http://localhost:${port}`);
 });
+
+const handler = (req, res) => {
+  const d = new Date()
+  res.end(d.toString())
+}
+
+module.exports = allowCors(handler)
