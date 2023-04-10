@@ -36,18 +36,26 @@ app.post('/api/email', (req, res) => {
   `;
 
   // create reusable transporter object using the default SMTP transport
-  let transporter = nodemailer.createTransport({
-    host: 'mail.YOURDOMAIN.com',
+  let transpoter = nodemailer.createTransport({
+    service: 'gmail',
     port: 587,
     secure: false, // true for 465, false for other ports
     auth: {
-        user: 'YOUREMAIL', // generated ethereal user
-        pass: 'YOURPASSWORD'  // generated ethereal password
-    },
-    tls:{
+      user: process.env.USER, // email
+      pass: process.env.PASSWORD, //password
+    },tls:{
       rejectUnauthorized:false
     }
+
   });
+  transpoter.sendMail(options, (err, info) => {
+    if (err) {
+      console.log(err);
+      return;
+    }
+  });
+  });
+
 
   // setup email data with unicode symbols
   let mailOptions = {
@@ -68,7 +76,7 @@ app.post('/api/email', (req, res) => {
 
       res.render('contact', {msg:'Email has been sent'});
   });
-  });
+  
 
 app.listen(port, () => {
   console.log(`http://localhost:${port}`);
