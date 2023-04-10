@@ -4,12 +4,10 @@
    "builds": [
       { "src": "./server.js", "use": "@vercel/node" }
    ],
-   "routes": [
-      { "src": "/(.*)", "dest": "/" }
-   ],
+  
    "headers": [
      {
-       "source": "/https://imagicstudio.co",
+       "source": "https://imagicstudio.co",
        "headers": [
          { "key": "Access-Control-Allow-Credentials", "value": "true" },
          { "key": "Access-Control-Allow-Origin", "value": "*" },
