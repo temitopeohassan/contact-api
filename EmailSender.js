@@ -2,7 +2,7 @@ import nodemailer from 'nodemailer';
 
 const Email = (options) => {
   let transpoter = nodemailer.createTransport({
-    service: 'hotmail', //i use outlook
+    service: 'gmail', //i use outlook
     auth: {
       user: process.env.USER, // email
       pass: process.env.PASSWORD, //password
