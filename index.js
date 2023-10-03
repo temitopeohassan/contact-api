@@ -7,7 +7,7 @@ const nodemailer = require('nodemailer');
 dotenv.config();
 const app = express();
 app.use(express.json());
-app.use(cors({ origin: "https://imagicstudio.co", credentials: false }));
+app.use(cors({ origin: "https://imagicstudio.co/contact", credentials: false }));
 const port = process.env.PORT || 3001;
 
 app.get('/', (req, res) => {
